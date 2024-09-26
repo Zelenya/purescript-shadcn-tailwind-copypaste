@@ -1,0 +1,33 @@
+package:
+  dependencies:
+    - b64
+    - console
+    - debug
+    - effect
+    - exceptions
+    - fetch
+    - fetch-yoga-json
+    - maybe
+    - prelude
+    - profunctor-lenses
+    - random
+    - react-basic
+    - react-basic-dom
+    - react-basic-hooks
+    - routing-duplex
+    - undefined-is-not-a-problem
+    - web-clipboard
+    - web-dom
+    - web-html
+    - web-router
+    - web-storage
+    - yoga-json
+    - react-basic-dom-beta
+  name: my-project
+workspace:
+  extraPackages: 
+    react-basic-dom-beta:
+        git: https://github.com/rowtype-yoga/purescript-react-basic-dom-beta.git
+        ref: 40719fffb5b8b0578be66f67969b0099f5e08c8c
+  packageSet:
+    registry: 51.1.0 
