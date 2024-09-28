@@ -24,6 +24,7 @@ foreign import chevronDown :: forall r. ReactComponent { | r }
 foreign import circleUser :: forall r. ReactComponent { | r }
 foreign import clipboardCheck :: forall r. ReactComponent { | r }
 foreign import clipboardCopy :: forall r. ReactComponent { | r }
+foreign import construction :: forall r. ReactComponent { | r }
 foreign import dollarSign :: forall r. ReactComponent { | r }
 foreign import link :: forall r. ReactComponent { | r }
 foreign import loader2 :: forall r. ReactComponent { | r }

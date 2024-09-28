@@ -13,10 +13,10 @@ import Effect (Effect)
 import Effect.Aff (Error)
 import Effect.Aff as Exception
 import Effect.Class.Console (log)
+import Foreign.Shadcn.AlertDemo (alert, alertDescription, alertTitle)
 import Foreign.Shadcn.Button (button)
-import Foreign.Shadcn.Card (card, cardHeader, cardTitle)
 import Foreign.Shadcn.Toast (useToast)
-import LucideReact (circleUser, makeIcon)
+import LucideReact (circleUser, makeIcon, construction)
 import React.Basic.Hooks (JSX, ReactComponent, element, reactComponent)
 import React.Basic.Hooks as React
 import Service.ApiClient (ApiClient)
@@ -61,21 +61,12 @@ mkDashboard = do
           Routes.Users -> preview
       ]
   where
-  -- This is my laziness
   preview =
-    R.main
-      { className: "flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8" }
-      [ card
-          { className: "xl:col-span-2" }
-          [ cardHeader
-              { className: "flex flex-row justify-center" }
-              [ R.div {}
-                  [ cardTitle
-                      { className: "text-muted-foreground" }
-                      [ R.text "🚧 🚧 Under active development 🚧 🚧"
-                      ]
-                  ]
-              ]
+    R.main { className: "p-6" }
+      [ alert { variant: "destructive" }
+          [ makeIcon construction { className: "h-4 w-4" }
+          , alertTitle {} [ R.text "Caution!" ]
+          , alertDescription {} [ R.text "Under active development." ]
           ]
       ]
 

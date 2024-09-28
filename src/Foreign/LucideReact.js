@@ -7,6 +7,7 @@ export const chevronDown = icons.ChevronDown
 export const circleUser = icons.CircleUser
 export const clipboardCheck = icons.ClipboardCheck
 export const clipboardCopy = icons.ClipboardCopy
+export const construction = icons.Construction
 export const dollarSign = icons.DollarSign
 export const link = icons.Link
 export const loader2 = icons.Loader2
