@@ -41,7 +41,7 @@ mkApp = do
       onLoginSuccess = liftEffect <<< setToken <<< Loaded
       refreshAndGetAccessToken = Auth.refreshAndGetAccessToken { apiUrl }
 
-    pure $ R.div { className: "dark bg-background" }
+    pure $ R.div {}
       [ case token of
           NoToken -> R.text "Loading..."
           NeedToLogin -> element loginForm { doLogin, onLoginSuccess }

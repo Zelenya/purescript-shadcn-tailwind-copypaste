@@ -44,8 +44,6 @@ This repository serves two purposes:
 
 ## How does it work?
 
-Article: TBD
-
 Video: https://youtu.be/Vgn5hEVK7lU
 
 ## Tooling and setting things up

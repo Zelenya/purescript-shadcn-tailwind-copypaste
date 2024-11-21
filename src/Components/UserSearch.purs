@@ -39,7 +39,7 @@ mkUserSearch = reactComponent "UserSearch" \{ apiClient, onError } -> React.do
     onSubmit email = do
       maybeUser <- attempt $ apiClient.findUser email
       liftEffect case maybeUser of
-        Right userId -> router.redirect (Routes.User userId)
+        Right userId -> router.navigate (Routes.User userId)
         Left error -> onError "User not found" error
 
   pure $ R.div
