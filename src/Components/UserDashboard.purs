@@ -14,6 +14,7 @@ import Effect (Effect)
 import Effect.Aff (Error, attempt)
 import Effect.Class (liftEffect)
 import Effect.Console (log)
+import Foreign.Shadcn.AlertDemo (alert, alertDescription, alertTitle)
 import Foreign.Shadcn.Button (button)
 import Foreign.Shadcn.Card (card, cardContent, cardHeader, cardTitle)
 import Foreign.Shadcn.Command (command, commandEmpty, commandGroup, commandInput, commandItem, commandList, commandSeparator)
@@ -22,7 +23,7 @@ import Foreign.Shadcn.Input (input)
 import Foreign.Shadcn.Label (label)
 import Foreign.Shadcn.Popover (popover, popoverContent, popoverTrigger)
 import Foreign.Shadcn.Skeleton (skeleton)
-import LucideReact (activity, chevronDown, link, mail, makeIcon, refresh, users, wallet)
+import LucideReact (activity, chevronDown, link, mail, makeIcon, refresh, users, wallet, construction)
 import React.Basic.DOM.Events (preventDefault)
 import React.Basic.Events (handler, handler_)
 import React.Basic.Hooks (JSX, ReactComponent, element, reactComponent, useState', (/\))
@@ -65,7 +66,14 @@ mkUserPage = do
 
     pure $ R.main
       { className: "flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8" }
-      [ R.div
+      [ alert { variant: "destructive" }
+          [ makeIcon construction { className: "h-4 w-4" }
+          , alertTitle {} [ R.text "No Backend" ]
+          , alertDescription {}
+              [ R.text "This page will show errors - that's intentional! This demo has no real API, so fetching user data fails. This is an example of the Alert component with destructive variant."
+              ]
+          ]
+      , R.div
           { className: "grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3" }
           [ maybe skelly userInfo user -- This card shows a simple user card
           , maybe skelly productInfo product -- This card won't show, because the product endpoint always fails

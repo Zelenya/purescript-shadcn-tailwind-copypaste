@@ -1,10 +1,5 @@
 import { main } from '../output/Main'
 
-// Hot reloading. See https://parceljs.org/features/development/#hot-reloading
-if (module.hot) {
-  module.hot.accept(function () {
-    main()
-  })
-}
-
-main()
+// When you develop locally, you can either point to prod or staging APIs
+main({"type" : "Dev", "value": "Production" })
+// main({"type" : "Dev", "value": "Staging" })

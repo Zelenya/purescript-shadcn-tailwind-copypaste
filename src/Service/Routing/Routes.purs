@@ -20,6 +20,7 @@ data Route
   = Home
   | Users
   | User UserId
+  | Analytics
 
 derive instance Generic Route _
 derive instance Eq Route
@@ -35,6 +36,7 @@ routes =
     { "Home": noArgs
     , "Users": "users" / noArgs
     , "User": "users" / userId
+    , "Analytics": "analytics" / noArgs
     }
 
 parseRoute :: String -> Either RouteError Route

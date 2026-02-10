@@ -2,6 +2,7 @@ import * as icons from "lucide-react"
 
 export const activity = icons.Activity
 export const arrowDown = icons.ArrowDown
+export const barChart = icons.BarChart3
 export const bomb = icons.Bomb
 export const chevronDown = icons.ChevronDown
 export const circleUser = icons.CircleUser
@@ -14,6 +15,10 @@ export const loader2 = icons.Loader2
 export const mail = icons.Mail
 export const refresh = icons.RefreshCcw
 export const search = icons.Search
+export const trendingUp = icons.TrendingUp
+export const trendingDown = icons.TrendingDown
 export const users = icons.Users
 export const video = icons.Video
 export const wallet = icons.Wallet
+export const sun = icons.Sun
+export const moon = icons.Moon
