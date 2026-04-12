@@ -16,9 +16,11 @@ import React.Basic.Hooks.Aff (useAff)
 import Service.Auth as Auth
 import Service.ApiClient as ApiClient
 import Types (JwtAccessToken)
+import Mode (initializeMode)
 
 mkApp :: Component {}
 mkApp = do
+  _ <- initializeMode
   let { apiUrl } = Config.devConfig
   dashboard <- mkDashboard
   loginForm <- mkLoginForm

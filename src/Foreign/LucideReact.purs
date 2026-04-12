@@ -19,6 +19,7 @@ makeIcon icon iconProps =
 
 foreign import activity :: forall r. ReactComponent { | r }
 foreign import arrowDown :: forall r. ReactComponent { | r }
+foreign import barChart :: forall r. ReactComponent { | r }
 foreign import bomb :: forall r. ReactComponent { | r }
 foreign import chevronDown :: forall r. ReactComponent { | r }
 foreign import circleUser :: forall r. ReactComponent { | r }
@@ -31,6 +32,10 @@ foreign import loader2 :: forall r. ReactComponent { | r }
 foreign import mail :: forall r. ReactComponent { | r }
 foreign import refresh :: forall r. ReactComponent { | r }
 foreign import search :: forall r. ReactComponent { | r }
+foreign import trendingUp :: forall r. ReactComponent { | r }
+foreign import trendingDown :: forall r. ReactComponent { | r }
 foreign import users :: forall r. ReactComponent { | r }
 foreign import video :: forall r. ReactComponent { | r }
 foreign import wallet :: forall r. ReactComponent { | r }
+foreign import sun :: forall r. ReactComponent { | r }
+foreign import moon :: forall r. ReactComponent { | r }

@@ -5,18 +5,22 @@ module Components.Dashboard
 import Prelude
 
 import Beta.DOM as R
+import Components.Analytics (mkAnalytics)
 import Components.UserPage (mkUserPage)
 import Components.UserSearch (mkUserSearch)
+import Components.UsersTable (mkUsersTable)
 import Data.Generic.Rep (class Generic)
 import Data.Show.Generic (genericShow)
 import Effect (Effect)
 import Effect.Aff (Error)
 import Effect.Aff as Exception
 import Effect.Class.Console (log)
-import Foreign.Shadcn.AlertDemo (alert, alertDescription, alertTitle)
 import Foreign.Shadcn.Button (button)
+import Foreign.Shadcn.Card (card, cardContent, cardDescription, cardHeader, cardTitle)
 import Foreign.Shadcn.Toast (useToast)
-import LucideReact (circleUser, makeIcon, construction)
+import LucideReact (circleUser, makeIcon, activity, sun)
+import Mode (toggleMode)
+import React.Basic.Events (handler_)
 import React.Basic.Hooks (JSX, ReactComponent, element, reactComponent)
 import React.Basic.Hooks as React
 import Service.ApiClient (ApiClient)
@@ -27,11 +31,13 @@ import Service.Routing.Routes as Routes
 type BaseProps r = (apiClient :: ApiClient | r)
 
 -- This is the core of the app (called dashboard for the lack of a better name).
--- It has two tabs: Home and User, which are also connected to the routes
+-- It has tabs: Home, Users, and Analytics, which are also connected to the routes
 mkDashboard :: Effect (ReactComponent { | BaseProps () })
 mkDashboard = do
   userSearch <- mkUserSearch
   userPage <- mkUserPage
+  usersTable <- mkUsersTable
+  analytics <- mkAnalytics
 
   reactComponent "Dashboard" \{ apiClient } -> React.do
     toast <- useToast
@@ -39,11 +45,12 @@ mkDashboard = do
 
     let
       -- Unified error handling for all subcomponents
+      -- Note: errors are expected in this demo since there's no real backend
       onError :: String -> Error -> Effect Unit
       onError reason err = do
-        let description = reason <> ": " <> Exception.message err
-        log description
-        toast { variant: "destructive", title: "Something went wrong", description }
+        let description = reason <> " (This is expected - no backend in this demo)"
+        log $ reason <> ": " <> Exception.message err
+        toast { variant: "destructive", title: "API Error Demo", description }
 
     pure $ R.div
       { className: "flex min-h-screen w-full flex-col" }
@@ -54,19 +61,77 @@ mkDashboard = do
               { apiClient
               , onError
               }
+          , button
+              { className: "rounded-full"
+              , variant: "ghost"
+              , size: "icon"
+              , onClick: handler_ toggleMode
+              }
+              [ makeIcon sun { className: "h-5 w-5" }
+              , R.span { className: "sr-only" } [ R.text "Toggle dark/light mode" ]
+              ]
           ]
       , case router.route of
-          Routes.Home -> preview
+          Routes.Home -> homePage
           Routes.User userId -> element userPage { apiClient, userId, onError }
-          Routes.Users -> preview
+          Routes.Users -> element usersTable {}
+          Routes.Analytics -> element analytics {}
       ]
   where
-  preview =
-    R.main { className: "p-6" }
-      [ alert { variant: "destructive" }
-          [ makeIcon construction { className: "h-4 w-4" }
-          , alertTitle {} [ R.text "Caution!" ]
-          , alertDescription {} [ R.text "Under active development." ]
+  homePage =
+    R.main { className: "p-6 space-y-6" }
+      [ R.div { className: "grid gap-4 md:grid-cols-3" }
+          [ card {}
+              [ cardHeader { className: "flex flex-row items-center justify-between space-y-0 pb-2" }
+                  [ cardTitle { className: "font-medium" } [ R.text "This is a PureScript + shadcn/ui demo app" ]
+                  , makeIcon activity { className: "h-4 w-4 text-muted-foreground" }
+                  ]
+              , cardContent {}
+                  [ R.div { className: "" }
+                      [ R.text "These cards are just placesholders to showcase the shadcn/ui components integration."
+                      ]
+                  , R.p { className: "text-xs text-muted-foreground" }
+                      [ R.text "Checkout the source code for comments and basic documentation" ]
+                  ]
+              ]
+          , card {}
+              [ cardHeader {}
+                  [ cardTitle { className: "font-medium" } [ R.text "Quick Stats" ]
+                  ]
+              , cardContent {}
+                  [ R.div { className: "text-2xl font-bold" } [ R.text "6" ]
+                  , R.p { className: "text-xs text-muted-foreground" }
+                      [ R.text "Team members in the system" ]
+                  ]
+              ]
+          , card {}
+              [ cardHeader {}
+                  [ cardTitle { className: "font-medium" } [ R.text "System Status" ]
+                  ]
+              , cardContent {}
+                  [ R.div { className: "flex items-center gap-2" }
+                      [ R.span { className: "h-2 w-2 rounded-full bg-green-500" } []
+                      , R.span { className: "text-sm" } [ R.text "All systems operational" ]
+                      ]
+                  , R.div { className: "flex items-center gap-2" }
+                      [ R.span { className: "h-2 w-2 rounded-full bg-destructive" } []
+                      , R.span { className: "text-sm" } [ R.text "There is no BE (as expected)" ]
+                      ]
+                  ]
+              ]
+          ]
+      , card {}
+          [ cardHeader {}
+              [ cardTitle {} [ R.text "Getting Started" ]
+              , cardDescription {} [ R.text "Explore the demo features" ]
+              ]
+          , cardContent {}
+              [ R.ul { className: "list-disc list-inside space-y-2 text-sm text-muted-foreground" }
+                  [ R.li {} [ R.text "Check out the Users tab to see a table of team members" ]
+                  , R.li {} [ R.text "Visit Analytics for charts and statistics" ]
+                  , R.li {} [ R.text "Use the search bar to find specific users" ]
+                  ]
+              ]
           ]
       ]
 
@@ -87,6 +152,8 @@ navigation { activeTab } = R.nav
       ]
   , renderTab Home
   , renderTab Users
+  , renderTab Analytics
+
   ]
   where
   renderTab :: Tab -> JSX
@@ -99,19 +166,22 @@ navigation { activeTab } = R.nav
   color tab = if activeTab == tab then "text-foreground" else "text-muted-foreground"
 
 data Tab
-  = Users
-  | Home
+  = Home
+  | Users
+  | Analytics
 
 tabToPage :: Tab -> Routes.Route
 tabToPage = case _ of
-  Users -> Routes.Users
   Home -> Routes.Home
+  Users -> Routes.Users
+  Analytics -> Routes.Analytics
 
 pageToTab :: Routes.Route -> Tab
 pageToTab = case _ of
+  Routes.Home -> Home
   Routes.Users -> Users
   Routes.User _ -> Users
-  Routes.Home -> Home
+  Routes.Analytics -> Analytics
 
 derive instance Eq Tab
 derive instance Generic Tab _
